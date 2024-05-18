@@ -1,0 +1,13 @@
+services:
+  db_menu_maker:
+    image: postgres:latest
+    container_name: nest_db
+    env_file:
+      - ./docker-compose.env
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_menu_maker:/var/lib/db/data
+
+volumes:
+  db_menu_maker:
