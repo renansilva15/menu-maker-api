@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-// import { PersonsModule } from './modules/persons/persons.module';
+import { PersonsModule } from './modules/persons/persons.module';
 
 @Module({
   imports: [
@@ -21,7 +21,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       migrations: [`${__dirname}/migrations/*.{js,ts}`],
       migrationsRun: true,
     }),
-    // PersonsModule,
+    PersonsModule,
   ],
   controllers: [AppController],
 })
