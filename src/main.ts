@@ -8,7 +8,10 @@ async function bootstrap() {
 
   app.setGlobalPrefix('api');
 
-  const config = new DocumentBuilder().setTitle('Menu Maker').build();
+  const config = new DocumentBuilder()
+    .setTitle('Menu Maker')
+    .addTag('persons')
+    .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-docs', app, document);
 
