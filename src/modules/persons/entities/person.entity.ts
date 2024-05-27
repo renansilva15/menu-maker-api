@@ -1,5 +1,6 @@
 import { DefaultEntity } from 'src/common/entities/default.entity';
-import { Column, Entity } from 'typeorm';
+import { TokenEntity } from 'src/modules/tokens/entities/token.entity';
+import { Column, Entity, OneToMany } from 'typeorm';
 
 @Entity({ name: 'persons' })
 export class PersonEntity extends DefaultEntity<PersonEntity> {
@@ -26,4 +27,7 @@ export class PersonEntity extends DefaultEntity<PersonEntity> {
 
   @Column({ name: 'is_banned' })
   isBanned: boolean;
+
+  @OneToMany(() => TokenEntity, (token) => token.person)
+  tokens: TokenEntity[];
 }
