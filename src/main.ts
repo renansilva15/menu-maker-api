@@ -11,7 +11,8 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Menu Maker')
     .addTag('persons')
-    .addTag('owers')
+    .addTag('owners')
+    .addTag('auth')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-docs', app, document);

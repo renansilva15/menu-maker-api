@@ -145,7 +145,10 @@ export class PersonsService {
   }
 
   async findOneByEmail(email: string): Promise<PersonEntity> {
-    const person = await this.personRepository.findOne({ where: { email } });
+    const person = await this.personRepository.findOne({
+      where: { email },
+      relations: ['owner'],
+    });
 
     if (!person) {
       throw new NotFoundException(`Person with email ${email} not found`);
