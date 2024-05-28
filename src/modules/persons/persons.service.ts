@@ -65,7 +65,7 @@ export class PersonsService {
 
       if (createPersonDto.email === person.email) {
         errorMessage += errorMessage.length > 0 ? '. ' : '';
-        errorMessage += `Person with CPF ${createPersonDto.cpf} already exists`;
+        errorMessage += `Person with email ${createPersonDto.email} already exists`;
       }
 
       throw new ConflictException(errorMessage);
