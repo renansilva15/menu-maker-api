@@ -1,6 +1,7 @@
 import { DefaultEntity } from 'src/common/entities/default.entity';
+import { OwerEntity } from 'src/modules/ower/entities/ower.entity';
 import { TokenEntity } from 'src/modules/tokens/entities/token.entity';
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Column, Entity, OneToMany, OneToOne } from 'typeorm';
 
 @Entity({ name: 'persons' })
 export class PersonEntity extends DefaultEntity<PersonEntity> {
@@ -30,4 +31,7 @@ export class PersonEntity extends DefaultEntity<PersonEntity> {
 
   @OneToMany(() => TokenEntity, (token) => token.person)
   tokens: TokenEntity[];
+
+  @OneToOne(() => OwerEntity, (ower) => ower.person)
+  ower: OwerEntity;
 }
