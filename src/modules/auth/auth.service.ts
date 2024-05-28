@@ -1,17 +1,45 @@
 import {
+  ForbiddenException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { PersonsService } from '../persons/persons.service';
 import { HashService } from 'src/common/modules/hash/hash.service';
+import { PersonEntity } from '../persons/entities/person.entity';
+import { JwtService } from '@nestjs/jwt';
+
+type Role = 'Owner' | 'Customer';
+
+type JWTPayload = {
+  sub: string;
+  email: string;
+  role: Role;
+  firstName: string;
+  lastName: string;
+  iat?: number;
+  exp?: number;
+};
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly personsService: PersonsService,
     private readonly hashService: HashService,
+    private readonly jwtService: JwtService,
   ) {}
+
+  async ownerLogin(person: PersonEntity): Promise<string> {
+    const payload: JWTPayload = {
+      sub: person.owner.id,
+      role: 'Owner',
+      email: person.email,
+      firstName: person.firstName,
+      lastName: person.lastName,
+    };
+
+    return this.jwtService.sign(payload);
+  }
 
   async validateOwer(email: string, password: string) {
     const person = await this.personsService.findOneByEmail(email);
@@ -22,6 +50,10 @@ export class AuthService {
 
     if (!(await this.hashService.compare(password, person.password))) {
       throw new UnauthorizedException('Password incorrect');
+    }
+
+    if (!person.isEmailVerified) {
+      throw new ForbiddenException(`Email ${email} has not been verified yet`);
     }
 
     return { ...person, password: undefined };

@@ -4,17 +4,23 @@ import {
   HttpStatus,
   Post,
   UseGuards,
+  Request,
 } from '@nestjs/common';
 import { LocalOwnerAuthGuard } from './guards/local-owner-auth.guard';
 import { ApiTags } from '@nestjs/swagger';
+import { Request as ExpressRequest } from 'express';
+import { PersonEntity } from '../persons/entities/person.entity';
+import { AuthService } from './auth.service';
 
 @ApiTags('auth')
 @Controller()
 export class AuthController {
+  constructor(private readonly authService: AuthService) {}
+
   @Post('ower-login')
   @HttpCode(HttpStatus.OK)
   @UseGuards(LocalOwnerAuthGuard)
-  owerLogin() {
-    return 'Hello';
+  owerLogin(@Request() req: ExpressRequest & { user: PersonEntity }) {
+    return this.authService.ownerLogin(req.user);
   }
 }
