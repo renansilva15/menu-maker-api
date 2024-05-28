@@ -2,22 +2,17 @@
 
 ## Requeriments
 
-- Node
-- Docker
+- Docker Compose
 
 ## Installation
 
-Install the dependencies:
+Create a file **.env** and move everything inside .env.example to it.
+
+Create a file **docker-compose.env** and move everything inside docker-compose.env.example to it.
+
+Run:
 ```bash
-npm i
+docker compose up -d --build
 ```
 
-Start the database:
-```bash
-docker compose up -d
-```
-
-Run the project:
-```bash
-npm run start:dev
-```
+Then go to swagger http://localhost:3333/api-docs.
