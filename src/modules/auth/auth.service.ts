@@ -53,6 +53,8 @@ export class AuthService {
     }
 
     if (!person.isEmailVerified) {
+      await this.personsService.sendVerifyEmail(person);
+
       throw new ForbiddenException(`Email ${email} has not been verified yet`);
     }
 
