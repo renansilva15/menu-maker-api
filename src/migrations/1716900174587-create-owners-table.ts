@@ -1,10 +1,10 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class CreateOwersTable1716900174587 implements MigrationInterface {
+export class CreateOwnersTable1716900174587 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         queryRunner.query(`
-            CREATE TABLE IF NOT EXISTS owers (
+            CREATE TABLE IF NOT EXISTS owners (
                 id UUID PRIMARY KEY,
                 created_at TIMESTAMP NOT NULL,
                 updated_at TIMESTAMP NOT NULL,
@@ -16,7 +16,7 @@ export class CreateOwersTable1716900174587 implements MigrationInterface {
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         queryRunner.query(`
-            DROP TABLE IF EXISTS owers;
+            DROP TABLE IF EXISTS owners;
         `)
     }
 
