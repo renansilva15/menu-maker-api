@@ -51,6 +51,27 @@ export class PersonsService {
     return this.mailService.create(createEmailDto);
   }
 
+  async sendVerifyEmail(person: PersonEntity): Promise<any> {
+    const token = await this.generateToken(
+      person.id,
+      TokenPurpose.VERIFY_EMAIL,
+    );
+
+    const verifyEmailLink = `${this.verifyEmailRoute}?id=${person.id}&token=${token}`;
+
+    const verifyEmailMessage = this.generateVerifyEmailMessage(
+      person.firstName,
+      verifyEmailLink,
+    );
+
+    await this.sendEmail({
+      to: person.email,
+      subject: 'Verifique seu email',
+      text: verifyEmailMessage,
+      sender: 'Menu Maker',
+    });
+  }
+
   async create(createPersonDto: CreatePersonDto): Promise<PersonEntity> {
     const person = await this.personRepository.findOne({
       where: [{ cpf: createPersonDto.cpf }, { email: createPersonDto.email }],
@@ -89,24 +110,7 @@ export class PersonsService {
       }),
     );
 
-    const token = await this.generateToken(
-      newPerson.id,
-      TokenPurpose.VERIFY_EMAIL,
-    );
-
-    const verifyEmailLink = `${this.verifyEmailRoute}?id=${newPerson.id}&token=${token}`;
-
-    const verifyEmailMessage = this.generateVerifyEmailMessage(
-      newPerson.firstName,
-      verifyEmailLink,
-    );
-
-    await this.sendEmail({
-      to: newPerson.email,
-      subject: 'Verifique seu email',
-      text: verifyEmailMessage,
-      sender: 'Menu Maker',
-    });
+    await this.sendVerifyEmail(newPerson);
 
     return newPerson;
   }
