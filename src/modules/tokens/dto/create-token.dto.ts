@@ -12,7 +12,7 @@ export class CreateTokenDto {
   @IsString()
   @IsNotEmpty()
   @IsUUID()
-  personId: string;
+  id: string;
 
   @IsEnum(TokenPurpose)
   purpose: TokenPurpose;
