@@ -111,6 +111,25 @@ export class PersonsService {
     return newPerson;
   }
 
+  async verifyEmail(id: string, token: string): Promise<PersonEntity> {
+    const person = await this.personRepository.findOne({
+      where: {
+        id,
+        tokens: {
+          id: token,
+        },
+      },
+    });
+
+    if (!person) {
+      throw new NotFoundException(
+        `Person with ID ${id} and token ${token} not found`,
+      );
+    }
+
+    return this.personRepository.save({ ...person, isEmailVerified: true });
+  }
+
   async findAll(): Promise<PersonEntity[]> {
     return this.personRepository.find();
   }
