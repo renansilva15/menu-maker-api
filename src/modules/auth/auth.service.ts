@@ -9,7 +9,7 @@ import { HashService } from 'src/common/modules/hash/hash.service';
 import { PersonEntity } from '../persons/entities/person.entity';
 import { JwtService } from '@nestjs/jwt';
 
-type Role = 'Owner' | 'Customer';
+type Role = 'owner' | 'customer';
 
 type JWTPayload = {
   sub: string;
@@ -29,16 +29,16 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async ownerLogin(person: PersonEntity): Promise<string> {
+  async ownerLogin(person: PersonEntity): Promise<{ acessToken: string }> {
     const payload: JWTPayload = {
       sub: person.owner.id,
-      role: 'Owner',
+      role: 'owner',
       email: person.email,
       firstName: person.firstName,
       lastName: person.lastName,
     };
 
-    return this.jwtService.sign(payload);
+    return { acessToken: this.jwtService.sign(payload) };
   }
 
   async validateOwer(email: string, password: string) {
