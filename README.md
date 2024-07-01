@@ -16,3 +16,5 @@ docker compose up -d --build
 ```
 
 Then go to swagger http://localhost:3333/api-docs.
+
+You can also see [pgweb](https://hub.docker.com/r/sosedoff/pgweb) at http://localhost:8181/api-docs.
