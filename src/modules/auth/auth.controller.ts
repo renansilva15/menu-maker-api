@@ -14,11 +14,11 @@ import { AuthService } from './auth.service';
 import { OwnerLoginDto } from './dto/owner-login.dto';
 
 @ApiTags('auth')
-@Controller()
+@Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('ower-login')
+  @Post('owner-login')
   @HttpCode(HttpStatus.OK)
   @UseGuards(LocalOwnerAuthGuard)
   @ApiBody({ type: OwnerLoginDto })
