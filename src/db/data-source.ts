@@ -20,15 +20,35 @@ export const dataSource = new DataSource(options);
 
 export async function initializeDatabase() {
   if (process.env.NODE_ENV === 'development') {
-    while (true) {
-      // TODO: Update to better approach
+    const maxRetries = 5;
+    const retryDelay = 5000;
+    let attempts = 0;
+
+    while (attempts < maxRetries) {
+      if (dataSource.isInitialized) {
+        console.log('Connection already established.');
+        break;
+      }
+
       try {
         await dataSource.initialize();
+        console.log('Database connection established.');
         await runSeeders(dataSource);
-
         break;
       } catch (error) {
-        console.error(error);
+        attempts++;
+        console.error(`Attempt ${attempts} failed:`, error);
+
+        if (attempts >= maxRetries) {
+          console.error(
+            'Maximum number of attempts reached. Could not establish database connection.',
+          );
+
+          break;
+        }
+
+        console.log(`Retrying in ${retryDelay / 1000} seconds...`);
+        await new Promise((resolve) => setTimeout(resolve, retryDelay));
       }
     }
   }
