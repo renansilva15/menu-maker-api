@@ -10,7 +10,7 @@ export class CreateStablishmentsTable1720388009145 implements MigrationInterface
                 updated_at TIMESTAMP NOT NULL,
                 nm VARCHAR(100) UNIQUE NOT NULL,
                 slug VARCHAR(20) UNIQUE NOT NULL,
-                owner_id UUID UNIQUE NOT NULL,
+                owner_id UUID NOT NULL,
                 CONSTRAINT fk_owners_id FOREIGN KEY (owner_id) REFERENCES owners(id)
             );
         `)
