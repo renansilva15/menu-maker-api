@@ -18,7 +18,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async ownerLogin(person: PersonEntity): Promise<{ acessToken: string }> {
+  async ownerLogin(person: PersonEntity): Promise<{ ownerAcessToken: string }> {
     const payload: JWTPayload = {
       sub: person.owner.id,
       role: 'owner',
@@ -27,7 +27,7 @@ export class AuthService {
       lastName: person.lastName,
     };
 
-    return { acessToken: this.jwtService.sign(payload) };
+    return { ownerAcessToken: this.jwtService.sign(payload) };
   }
 
   async validateOwer(email: string, password: string) {
