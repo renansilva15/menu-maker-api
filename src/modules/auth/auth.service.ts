@@ -8,18 +8,7 @@ import { PersonsService } from '../persons/persons.service';
 import { HashService } from 'src/common/modules/hash/hash.service';
 import { PersonEntity } from '../persons/entities/person.entity';
 import { JwtService } from '@nestjs/jwt';
-
-type Role = 'owner' | 'customer';
-
-type JWTPayload = {
-  sub: string;
-  email: string;
-  role: Role;
-  firstName: string;
-  lastName: string;
-  iat?: number;
-  exp?: number;
-};
+import { JWTPayload } from './auth.types';
 
 @Injectable()
 export class AuthService {
@@ -59,5 +48,15 @@ export class AuthService {
     }
 
     return { ...person, password: undefined };
+  }
+
+  async validateOwnerById(email: string) {
+    const person = await this.personsService.findOneByEmail(email);
+
+    if (!person || !person.owner) {
+      throw new UnauthorizedException('JWT Invalid');
+    }
+
+    return person;
   }
 }

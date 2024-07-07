@@ -12,6 +12,7 @@ import { Request as ExpressRequest } from 'express';
 import { PersonEntity } from '../persons/entities/person.entity';
 import { AuthService } from './auth.service';
 import { OwnerLoginDto } from './dto/owner-login.dto';
+import { JwtOwnerAuthGuard } from './guards/jwt-owner-auth.guard';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -24,5 +25,11 @@ export class AuthController {
   @ApiBody({ type: OwnerLoginDto })
   owerLogin(@Request() req: ExpressRequest & { user: PersonEntity }) {
     return this.authService.ownerLogin(req.user);
+  }
+
+  @Post('owner-login-test')
+  @UseGuards(JwtOwnerAuthGuard)
+  owerLoginTest(@Request() req: ExpressRequest & { user: PersonEntity }) {
+    return req.user;
   }
 }
