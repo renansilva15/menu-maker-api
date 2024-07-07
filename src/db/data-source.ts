@@ -19,7 +19,8 @@ const options: DataSourceOptions & SeederOptions = {
 export const dataSource = new DataSource(options);
 
 export async function initializeDatabase() {
-  if (process.env.NODE_ENV === 'development') {
+  // TODO: IMPROVE ENV ACCESS
+  if (Boolean(process.env.SEED) === true) {
     const maxRetries = 5;
     const retryDelay = 5000;
     let attempts = 0;
@@ -32,7 +33,6 @@ export async function initializeDatabase() {
 
       try {
         await dataSource.initialize();
-        console.log('Database connection established.');
         await runSeeders(dataSource);
         break;
       } catch (error) {
