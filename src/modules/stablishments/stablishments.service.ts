@@ -1,4 +1,8 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { StablishmentEntity } from './entities/stablishment.entity';
 import { Repository } from 'typeorm';
@@ -67,5 +71,17 @@ export class StablishmentsService {
 
   async findAll() {
     return this.stablishmentRepository.find();
+  }
+
+  async findOne(id: string) {
+    const stablishment = await this.stablishmentRepository.findOne({
+      where: { id },
+    });
+
+    if (!stablishment) {
+      throw new NotFoundException(`Stablishment with ID ${id} not found`);
+    }
+
+    return stablishment;
   }
 }

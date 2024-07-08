@@ -6,9 +6,11 @@ import {
   UseGuards,
   ValidationPipe,
   Request,
+  Param,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { StablishmentsService } from './stablishments.service';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiParam, ApiTags } from '@nestjs/swagger';
 import { CreateStablishmentDto } from './dto/create-stablishment.dto';
 import { JwtOwnerAuthGuard } from '../auth/guards/jwt-owner-auth.guard';
 import { PersonEntity } from '../persons/entities/person.entity';
@@ -34,5 +36,19 @@ export class StablishmentsController {
   @UseGuards(JwtOwnerAuthGuard)
   findAll() {
     return this.stablishmentsService.findAll();
+  }
+
+  @Get(':id')
+  @ApiParam({
+    name: 'id',
+    type: 'string',
+    format: 'UUID',
+    description: 'Stablishment ID',
+    example: '0e174f42-d589-453b-9c65-beead600bac3',
+  })
+  @ApiBearerAuth('owner-access-token')
+  @UseGuards(JwtOwnerAuthGuard)
+  findOne(@Param(ParseUUIDPipe) id: string) {
+    return this.stablishmentsService.findOne(id);
   }
 }
