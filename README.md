@@ -6,9 +6,9 @@
 
 ## Installation
 
-Create a file **.env** and move everything inside .env.example to it.
+Create a file **.env** and move everything inside **.env.example** to it.
 
-Create a file **docker-compose.env** and move everything inside docker-compose.env.example to it.
+Create a file **docker-compose.env** and move everything inside **docker-compose.env.example** to it.
 
 Run:
 ```bash

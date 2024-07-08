@@ -11,7 +11,10 @@ export default class OwerSeeder implements Seeder {
     const personFactory = factoryManager.get(PersonEntity);
     const owerFactory = factoryManager.get(OwnerEntity);
 
-    const person = await personFactory.save({ firstName: 'The Man' });
+    const person = await personFactory.save({
+      firstName: 'The Man',
+      email: 'theman@example.com',
+    });
 
     await owerFactory.save({
       person,
