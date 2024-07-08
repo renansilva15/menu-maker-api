@@ -1,4 +1,8 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PersonsService } from '../persons/persons.service';
@@ -38,5 +42,15 @@ export class OwnersService {
 
   async findAll(): Promise<OwnerEntity[]> {
     return this.owerRepository.find();
+  }
+
+  async findOne(id: string): Promise<OwnerEntity> {
+    const owner = await this.owerRepository.findOne({ where: { id } });
+
+    if (!owner) {
+      throw new NotFoundException(`Owner with ID ${id} not found`);
+    }
+
+    return owner;
   }
 }

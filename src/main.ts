@@ -10,9 +10,18 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('Menu Maker')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+      },
+      'owner-access-token',
+    )
     .addTag('persons')
     .addTag('owners')
     .addTag('auth')
+    .addTag('stablishments')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-docs', app, document);

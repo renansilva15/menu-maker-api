@@ -1,13 +1,37 @@
-import { Controller, Get } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  UseGuards,
+  ValidationPipe,
+  Request,
+} from '@nestjs/common';
 import { StablishmentsService } from './stablishments.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { CreateStablishmentDto } from './dto/create-stablishment.dto';
+import { JwtOwnerAuthGuard } from '../auth/guards/jwt-owner-auth.guard';
+import { PersonEntity } from '../persons/entities/person.entity';
+import { Request as ExpressRequest } from 'express';
 
 @ApiTags('stablishments')
 @Controller('stablishments')
 export class StablishmentsController {
   constructor(private readonly stablishmentsService: StablishmentsService) {}
 
+  @Post()
+  @ApiBearerAuth('owner-access-token')
+  @UseGuards(JwtOwnerAuthGuard)
+  create(
+    @Request() req: ExpressRequest & { user: PersonEntity },
+    @Body(ValidationPipe) createStablishmentDto: CreateStablishmentDto,
+  ) {
+    return this.stablishmentsService.create(req.user, createStablishmentDto);
+  }
+
   @Get()
+  @ApiBearerAuth('owner-access-token')
+  @UseGuards(JwtOwnerAuthGuard)
   findAll() {
     return this.stablishmentsService.findAll();
   }
