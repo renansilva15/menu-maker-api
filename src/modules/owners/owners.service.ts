@@ -13,12 +13,12 @@ import { OwnerEntity } from './entities/owner.entity';
 export class OwnersService {
   constructor(
     @InjectRepository(OwnerEntity)
-    private readonly owerRepository: Repository<OwnerEntity>,
+    private readonly ownerRepository: Repository<OwnerEntity>,
     private readonly personsService: PersonsService,
   ) {}
 
   async create(createOwnerDto: CreateOwnerDto): Promise<OwnerEntity> {
-    const ower = await this.owerRepository.findOne({
+    const ower = await this.ownerRepository.findOne({
       where: {
         person: { id: createOwnerDto.personId },
       },
@@ -32,8 +32,8 @@ export class OwnersService {
 
     const person = await this.personsService.findOne(createOwnerDto.personId);
 
-    return this.owerRepository.save(
-      this.owerRepository.create({
+    return this.ownerRepository.save(
+      this.ownerRepository.create({
         personId: createOwnerDto.personId,
         person,
       }),
@@ -41,11 +41,11 @@ export class OwnersService {
   }
 
   async findAll(): Promise<OwnerEntity[]> {
-    return this.owerRepository.find();
+    return this.ownerRepository.find();
   }
 
   async findOne(id: string): Promise<OwnerEntity> {
-    const owner = await this.owerRepository.findOne({ where: { id } });
+    const owner = await this.ownerRepository.findOne({ where: { id } });
 
     if (!owner) {
       throw new NotFoundException(`Owner with ID ${id} not found`);
