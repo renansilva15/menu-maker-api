@@ -104,7 +104,7 @@ export class PersonsService {
       this.personRepository.create({
         ...createPersonDto,
         password: hashedPassword,
-        isEmailVerified,
+        isEmailVerified: true,
         isFirstLogin,
         isBanned,
       }),
