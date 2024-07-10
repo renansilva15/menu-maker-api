@@ -21,6 +21,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import * as multer from 'multer';
 import * as fs from 'fs';
 import * as path from 'path';
+import { CreateOrderDto } from './dto/create-order.dto';
 
 @ApiTags('products')
 @Controller('products')
@@ -83,7 +84,10 @@ export class ProductsController {
   })
   async create(
     @Param('stablishmentId', ParseUUIDPipe) stablishmentId: string,
-    @Body(ValidationPipe) createProductDto: Omit<CreateProductDto, 'imageUrl'>,
+    @Body(ValidationPipe)
+    createProductDto: Omit<CreateProductDto, 'imageUrl' | 'price'> & {
+      price: string;
+    },
     @UploadedFile() image: Express.Multer.File,
   ) {
     if (!image) {
@@ -94,10 +98,16 @@ export class ProductsController {
       await this.stablishmentsService.findOne(stablishmentId);
     }
 
+    const parsedPrice = parseFloat(createProductDto.price);
+    if (isNaN(parsedPrice)) {
+      throw new BadRequestException('Price must be a number');
+    }
+
     const imageUrl = `/uploads/${image.filename}`;
 
     return this.productsService.create(stablishmentId, {
       ...createProductDto,
+      price: parsedPrice,
       imageUrl,
     });
   }
@@ -121,5 +131,10 @@ export class ProductsController {
     }
 
     return this.productsService.findAll(stablishmentId);
+  }
+
+  @Post('create-order')
+  createOrder(@Body(ValidationPipe) createOrderDto: CreateOrderDto) {
+    return this.productsService.createOrder(createOrderDto);
   }
 }

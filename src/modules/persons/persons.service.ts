@@ -34,7 +34,7 @@ export class PersonsService {
   }
 
   private async generateToken(
-    id: string,
+    id: string, // TODO: Must be personId
     purpose: TokenPurpose,
     expiresAt?: Date,
   ): Promise<string> {
