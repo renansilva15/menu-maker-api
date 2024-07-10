@@ -22,6 +22,7 @@ async function bootstrap() {
     .addTag('owners')
     .addTag('auth')
     .addTag('stablishments')
+    .addTag('products')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-docs', app, document);
