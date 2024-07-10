@@ -44,7 +44,7 @@ export class StablishmentsController {
     description: 'Stablishment ID',
     example: '0e174f42-d589-453b-9c65-beead600bac3',
   })
-  findOne(@Param(ParseUUIDPipe) id: string) {
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.stablishmentsService.findOne(id);
   }
 }

@@ -14,7 +14,7 @@ export class CreateProductsTable1720576765900 implements MigrationInterface {
                 price DECIMAL NOT NULL,
                 image_url VARCHAR(255) NOT NULL,
                 category JSON NOT NULL,
-                stablishment_id UUID UNIQUE NOT NULL,
+                stablishment_id UUID NOT NULL,
                 CONSTRAINT fk_stablishments_id FOREIGN KEY (stablishment_id) REFERENCES stablishments(id)
             );
         `)
