@@ -22,6 +22,7 @@ import * as multer from 'multer';
 import * as fs from 'fs';
 import * as path from 'path';
 import { CreateOrderDto } from './dto/create-order.dto';
+import * as admin from 'firebase-admin';
 
 @ApiTags('products')
 @Controller('products')
@@ -30,6 +31,26 @@ export class ProductsController {
     private readonly productsService: ProductsService,
     private readonly stablishmentsService: StablishmentsService,
   ) {}
+
+  private async uploadToFirebase(file: Express.Multer.File): Promise<string> {
+    const bucket = admin.storage().bucket();
+    const uploadPath = `products/${file.filename}`;
+
+    await bucket.upload(file.path, {
+      destination: uploadPath,
+      public: true,
+      metadata: {
+        contentType: file.mimetype,
+      },
+    });
+
+    const fileUrl = `https://storage.googleapis.com/${bucket.name}/${uploadPath}`;
+
+    // Delete the local file after uploading to Firebase
+    fs.unlinkSync(file.path);
+
+    return fileUrl;
+  }
 
   @Post(':stablishmentId')
   @UseInterceptors(
@@ -103,7 +124,7 @@ export class ProductsController {
       throw new BadRequestException('Price must be a number');
     }
 
-    const imageUrl = `/uploads/${image.filename}`;
+    const imageUrl = await this.uploadToFirebase(image);
 
     return this.productsService.create(stablishmentId, {
       ...createProductDto,
